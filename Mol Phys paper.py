@@ -12,16 +12,13 @@ plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['axes.linewidth'] = 3.0
 
 FIGSIZE = (6, 5)
-
 AXIS_LINE_WIDTH = 3.0
 TICK_WIDTH = 2.0
 TICK_LEN_MAJOR = 8
 TICK_LEN_MINOR = 4
-
 LABEL_FONT_SIZE = 18
 TICK_FONT_SIZE = 14
 TEXT_LABEL_SIZE = 24
-
 MARKER_SIZE_PTS = 6
 MARKER_EDGE_W = 1.2
 DATA_COLOR = '#3b86c4'
@@ -34,14 +31,12 @@ FIT_DASHES = (3, 3)
 
 SHOW_GRID = False
 
-
 def _ensure_dir_for_file(path):
     if path is None:
         return
     d = os.path.dirname(os.path.abspath(path))
     if d and (not os.path.exists(d)):
         os.makedirs(d, exist_ok=True)
-
 
 def save_xy_csv(path, x, y, header=("x", "y")):
     if path is None:
@@ -56,7 +51,6 @@ def save_xy_csv(path, x, y, header=("x", "y")):
         w.writerow(list(header))
         for xi, yi in zip(x, y):
             w.writerow([float(xi), float(yi)])
-
 
 def save_multi_series_xy_csv(path, series_list, header=("series", "x", "y")):
     if path is None:
@@ -74,7 +68,6 @@ def save_multi_series_xy_csv(path, series_list, header=("series", "x", "y")):
             for xi, yi in zip(x, y):
                 w.writerow([name, float(xi), float(yi)])
 
-
 def save_counts_csv(path, counts, header=("cluster_size", "count")):
     if path is None:
         return
@@ -86,7 +79,6 @@ def save_counts_csv(path, counts, header=("cluster_size", "count")):
         w.writerow(list(header))
         for si in s:
             w.writerow([int(si), int(counts[si])])
-
 
 def style_axes(ax):
     ax.spines['top'].set_visible(False)
@@ -102,7 +94,6 @@ def style_axes(ax):
 
     if SHOW_GRID:
         ax.grid(True, which='major', linestyle='--', linewidth=0.8, alpha=0.4)
-
 
 def flood_fill_allowed(grid, x, y, z, visited, allowed_values):
     N = grid.shape[0]
@@ -129,7 +120,6 @@ def flood_fill_allowed(grid, x, y, z, visited, allowed_values):
 
     return size, visited
 
-
 def count_all_clusters(grid, allowed_values):
     N = grid.shape[0]
     visited = np.zeros((N, N, N), dtype=bool)
@@ -145,7 +135,6 @@ def count_all_clusters(grid, allowed_values):
                         counts[sz] += 1
     return counts
 
-
 def count_all_P_clusters(grid):
     return count_all_clusters(grid, allowed_values=[2])
 
@@ -153,11 +142,9 @@ def count_all_P_clusters(grid):
 def count_all_RP_clusters(grid):
     return count_all_clusters(grid, allowed_values=[1, 2])
 
-
 def max_cluster_size_from_counts(counts):
     idx = np.nonzero(counts)[0]
     return int(idx.max()) if idx.size else 0
-
 
 def initialize_random_grid(N, R_perc, P_perc, V_perc, rng=None):
     if abs(R_perc + P_perc + V_perc - 1.0) > 1e-2:
@@ -184,7 +171,6 @@ def initialize_random_grid(N, R_perc, P_perc, V_perc, rng=None):
 
     rng.shuffle(flat)
     return flat.reshape((N, N, N))
-
 
 def simulate_run(N, n_iters, Q, T, H, R_perc, P_perc, V_perc, sample_iters, seed=None, verbose=False):
     rng = np.random.default_rng(seed)
@@ -280,7 +266,6 @@ def _compute_global_size_range(counts_list):
         raise ValueError("No cluster sizes found (all counts are zero).")
     return int(all_sizes.min()), int(all_sizes.max())
 
-
 def _sanitize_range(rng, s_min_global, s_max_global, name="range"):
     if rng is None:
         return s_min_global, s_max_global
@@ -294,7 +279,6 @@ def _sanitize_range(rng, s_min_global, s_max_global, name="range"):
     if a >= b:
         raise ValueError(f"{name} must satisfy min < max after clamping. Got {rng} -> {(a, b)}")
     return a, b
-
 
 def plot_cumulative_clusters_log(
     counts_list,
@@ -411,7 +395,6 @@ def plot_cumulative_clusters_log(
     fig.savefig(out_png, dpi=300)
     plt.close(fig)
 
-
 def plot_cluster_numbers(cluster_nums_list, out_png='clusters_vs_iteration.png'):
     fig, ax = plt.subplots(figsize=FIGSIZE)
     for nums in cluster_nums_list:
@@ -424,7 +407,6 @@ def plot_cluster_numbers(cluster_nums_list, out_png='clusters_vs_iteration.png')
     plt.tight_layout()
     fig.savefig(out_png, dpi=300)
     plt.close(fig)
-
 
 def plot_max_cluster_sizes(maxP_runs, maxRP_runs, out_png='max_cluster_size_vs_iteration.png'):
     fig, ax = plt.subplots(figsize=FIGSIZE)
@@ -447,7 +429,6 @@ def plot_max_cluster_sizes(maxP_runs, maxRP_runs, out_png='max_cluster_size_vs_i
     plt.tight_layout()
     fig.savefig(out_png, dpi=300)
     plt.close(fig)
-
 
 def plot_histogram_linear(values, out_png, bins=80,
                           xlabel='Value', ylabel='Count',
@@ -476,7 +457,6 @@ def plot_histogram_linear(values, out_png, bins=80,
     plt.tight_layout()
     fig.savefig(out_png, dpi=300)
     plt.close(fig)
-
 
 def plot_histogram_log_binned(values, out_png, bins_per_decade=10,
                               plot_range=None,
@@ -535,7 +515,6 @@ def plot_histogram_log_binned(values, out_png, bins_per_decade=10,
     plt.tight_layout()
     fig.savefig(out_png, dpi=300)
     plt.close(fig)
-
 
 def plot_histogram_binned_linear_x(values, out_png, bins=40,
                                   xlabel='Value', ylabel='Binned count',
@@ -646,14 +625,12 @@ def plot_histogram_binned_linear_x(values, out_png, bins=40,
     fig.savefig(out_png, dpi=300)
     plt.close(fig)
 
-
 def _pad_counts_to_len(c, L):
     if len(c) == L:
         return c.astype(np.float64, copy=False)
     out = np.zeros(L, dtype=np.float64)
     out[:len(c)] = c.astype(np.float64, copy=False)
     return out
-
 
 def build_three_cases_varlen(counts_list):
     if len(counts_list) == 0:
@@ -668,7 +645,6 @@ def build_three_cases_varlen(counts_list):
 
     averaged = pooled / float(len(old_list))
     return old_list, [pooled], [averaged]
-
 
 if __name__ == '__main__':
     OUTDIR = "export_xy"
