@@ -863,7 +863,7 @@ if __name__ == '__main__':
         plot_histogram_binned_linear_x(
             R_at_it0,
             out_png=f'hist_total_R_cells_iteration_{it0}_binned_loglog_refline.png',
-            bins=50,
+            bins=40,
             xlabel='Total Count',
             ylabel='Binned count',
             loglog=True,
